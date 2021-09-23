@@ -1,6 +1,70 @@
 # Jovo Framework Changelog
 
-### Latest Framework Version: 3.5.0<br><br>
+### Latest Framework Version: 3.5.2<br><br>
+
+
+#### 2021-09-23
+
+##### `jovo-analytics-googleanalytics [3.5.10]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-analytics-googleanalytics) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-integrations/jovo-analytics-googleanalytics) | [npm](https://www.npmjs.com/package/jovo-analytics-googleanalytics)
+* [#1036](https://github.com/jovotech/jovo-framework/pull/1036) :bug: Google analytics skill events + error tracking fixed  ([@freiSMS(https://github.com/freiSMS))
+
+
+#### 2021-09-02
+
+##### `jovo-analytics-googleanalytics [3.5.9]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-analytics-googleanalytics) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-integrations/jovo-analytics-googleanalytics) | [npm](https://www.npmjs.com/package/jovo-analytics-googleanalytics)
+* [#1000](https://github.com/jovotech/jovo-framework/pull/1000) :bug: AlexaSkill Event Errors in GoogleAnalytics ([@freiSMS(https://github.com/freiSMS))
+* [#965](https://github.com/jovotech/jovo-framework/pull/965) :bug: Fix empty user ([@theBenForce(https://github.com/theBenForce))
+
+#### 2021-07-07 
+
+##### `jovo-platform-googleassistantconv [3.5.4]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-platform-googleassistantconv) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-platforms/jovo-platform-googleassistantconv) | [npm](https://www.npmjs.com/package/jovo-platform-googleassistantconv)
+- [#948](https://github.com/jovotech/jovo-framework/pull/948) ✨ Add enableFullScreen and continueTtsDuringTouch ([@aswetlow](https://github.com/aswetlow))
+
+##### `jovo-platform-googleassistant [3.5.4]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-platform-googleassistant) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-platforms/jovo-platform-googleassistant) | [npm](https://www.npmjs.com/package/jovo-platform-googleassistant)
+- [#948](https://github.com/jovotech/jovo-framework/pull/948) ✨ Add enableFullScreen and continueTtsDuringTouch ([@aswetlow](https://github.com/aswetlow))
+
+
+### 2021-05-10
+
+##### `jovo-framework [3.5.2]`
+* [#929](https://github.com/jovotech/jovo-framework/pull/929) :sparkles: added sessionId to ContextPrevObject ([@JayDotDot(https://github.com/JayDotDot))
+
+
+### 2021-05-03
+
+##### `jovo-platform-lex [3.0.1]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-platform-lex) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-platforms/jovo-platform-lex) | [npm](https://www.npmjs.com/package/jovo-platform-lex)
+* [#917](https://github.com/jovotech/jovo-framework/pull/917) :sparkles: AWS Lex V1 plugin - beta version ([@kouz75(https://github.com/kouz75))
+
+##### `jovo-analytics-googleanalytics [3.5.6]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-analytics-googleanalytics) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-integrations/jovo-analytics-googleanalytics) | [npm](https://www.npmjs.com/package/jovo-analytics-googleanalytics)
+* [#927](https://github.com/jovotech/jovo-framework/pull/927) :recycle: Google Analytics Allow overriding documentTitle/documentPath/documentHostName ([@kouz75(https://github.com/kouz75))
+
+
+## 2021-04-13
+
+##### `jovo-analytics-googleanalytics [3.5.5]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-analytics-googleanalytics) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-integrations/jovo-analytics-googleanalytics) | [npm](https://www.npmjs.com/package/jovo-analytics-googleanalytics)
+* [#921](https://github.com/jovotech/jovo-framework/pull/921) :bug: Fix TLS Errors on Lambda ([@freiSMS(https://github.com/freiSMS))
+
+## 2021-03-31
+
+##### `jovo-analytics-googleanalytics [3.5.4]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-analytics-googleanalytics) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-integrations/jovo-analytics-googleanalytics) | [npm](https://www.npmjs.com/package/jovo-analytics-googleanalytics)
+* [#918](https://github.com/jovotech/jovo-framework/pull/918) :bug: Alexa Event Tracking on Google Analytics wrong pagename fix ([@freiSMS(https://github.com/freiSMS))
+
+## 2021-03-30
+
+##### `jovo-analytics-googleanalytics [3.5.3]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-analytics-googleanalytics) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-integrations/jovo-analytics-googleanalytics) | [npm](https://www.npmjs.com/package/jovo-analytics-googleanalytics)
+* [#916](https://github.com/jovotech/jovo-framework/pull/916) ✨ Google Analytics HealthCheck + Crawler Filter update + Event tracking of skill events ([@freiSMS(https://github.com/freiSMS))
+
+## 2021-03-26
+
+##### `jovo-analytics-dashbot [3.5.0]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-analytics-dashbot) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-integrations/jovo-analytics-dashbot) | [npm](https://www.npmjs.com/package/jovo-analytics-dashbot)
+* Add Conversational Actions support ([@aswetlow](https://github.com/aswetlow))
+
+##### `jovo-analytics-googleanalytics [3.5.1]` [Jovo Marketplace](https://www.jovo.tech/marketplace/jovo-analytics-googleanalytics) | [GitHub](https://github.com/jovotech/jovo-framework/tree/master/jovo-integrations/jovo-analytics-googleanalytics) | [npm](https://www.npmjs.com/package/jovo-analytics-googleanalytics)
+* [#910](https://github.com/jovotech/jovo-framework/pull/910) ✨ Custom Metrics and Dimensions supporting names + validation ([@freiSMS(https://github.com/freiSMS))
+* [#905](https://github.com/jovotech/jovo-framework/pull/905) ✨ Support multiple experiments ([@theBenForce(https://github.com/theBenForce))
+
+##### `jovo-core [3.5.1]`
+* Improve types in helper methods ([@aswetlow](https://github.com/aswetlow))
 
 ## 2021-02-22
 
