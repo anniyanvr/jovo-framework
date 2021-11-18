@@ -3,9 +3,65 @@ import { GoogleActionRequest } from 'jovo-platform-googleassistant';
 import { DialogflowRequest } from 'jovo-platform-dialogflow';
 import { HandleRequest, Jovo, JovoError, ErrorCode } from 'jovo-core';
 import { get } from 'lodash';
+import { Helper } from './helper';
 
 export class GoogleAnalyticsGoogleAssistant extends GoogleAnalytics {
-  track(handleRequest: HandleRequest) {
+  static isCrawler(jovo: Jovo) {
+    if (!jovo.$googleAction) {
+      return false;
+    }
+
+    if (GoogleAnalyticsGoogleAssistant.isNativeGoogleRequest(jovo)) {
+      if (jovo.$host.$request?.handler?.name === 'actions.handler.HEALTH_CHECK') {
+        return true;
+      }
+      return false;
+    } else {
+      const dialogFlowRequest = jovo.$request as DialogflowRequest;
+      const userName: string | undefined = get(
+        dialogFlowRequest.originalDetectIntentRequest!.payload,
+        'user.profile.familyName',
+      );
+      const isCrawler = userName && userName === 'Crawler';
+      return isCrawler;
+    }
+  }
+
+  static isVoiceMatchUser(jovo: Jovo) {
+    if (!jovo.$googleAction) {
+      return false;
+    }
+
+    if (GoogleAnalyticsGoogleAssistant.isNativeGoogleRequest(jovo)) {
+      if (jovo.$host.$request?.user?.verificationStatus === 'VERIFIED') {
+        return true;
+      }
+      return false;
+    } else {
+      const dialogFlowRequest = jovo.$request as DialogflowRequest;
+      const userVerificationStatus: string | undefined = get(
+        dialogFlowRequest.originalDetectIntentRequest!.payload,
+        'user.userVerificationStatus',
+      ); //  inputs[0].rawInputs[0].inputType');
+      const isVoiceMatchUser = userVerificationStatus && userVerificationStatus === 'VERIFIED';
+      return isVoiceMatchUser;
+    }
+  }
+
+  /**
+   * Checks of current request belongs to conversational action
+   *
+   * @returns true no extra NLU (dialogflow etc)
+   */
+  static isNativeGoogleRequest(jovo: Jovo) {
+    const requestContainsSubRequest: string | undefined = get(
+      jovo.$request,
+      'originalDetectIntentRequest',
+    );
+    return !requestContainsSubRequest;
+  }
+
+  async track(handleRequest: HandleRequest) {
     const jovo: Jovo = handleRequest.jovo!;
     if (!jovo) {
       throw new JovoError(
@@ -19,28 +75,17 @@ export class GoogleAnalyticsGoogleAssistant extends GoogleAnalytics {
       return;
     }
 
-    const dialogFlowRequest = jovo.$request as DialogflowRequest;
-
-    const userName: string | undefined = get(
-      dialogFlowRequest.originalDetectIntentRequest!.payload,
-      'user.profile.familyName',
-    );
-    const isCrawler = userName && userName === 'Crawler';
-    if (isCrawler) {
+    if (GoogleAnalyticsGoogleAssistant.isCrawler(jovo)) {
       return;
     }
 
-    if (!this.config.skipUnverifiedUser) {
-      const userVerificationStatus: string | undefined = get(
-        dialogFlowRequest.originalDetectIntentRequest!.payload,
-        'user.userVerificationStatus',
-      ); //  inputs[0].rawInputs[0].inputType');
-      const isVoiceMatchUser = userVerificationStatus && userVerificationStatus === 'VERIFIED';
+    if (this.config.skipUnverifiedUser) {
+      const isVoiceMatchUser = GoogleAnalyticsGoogleAssistant.isVoiceMatchUser(jovo);
       if (!isVoiceMatchUser) {
         return;
       }
     }
-    super.track(handleRequest);
+    await super.track(handleRequest);
   }
 
   initVisitor(jovo: Jovo) {
@@ -58,6 +103,8 @@ export class GoogleAnalyticsGoogleAssistant extends GoogleAnalytics {
     );
   }
 
+
+
   setGoogleAnalyticsObject(handleRequest: HandleRequest) {
     const jovo: Jovo = handleRequest.jovo!;
     if (!jovo) {
@@ -68,6 +115,21 @@ export class GoogleAnalyticsGoogleAssistant extends GoogleAnalytics {
       );
     }
 
+    if (jovo.constructor.name !== 'GoogleAction') {
+      return;
+    }
+
     super.setGoogleAnalyticsObject(handleRequest);
+  }
+
+  protected async sendError(handleRequest: HandleRequest) {
+    const jovo: Jovo = handleRequest.jovo!;
+    if (jovo?.constructor.name !== 'GoogleAction') {
+      // don't send anything
+      return;
+    }
+    // Stop the current tracking session for google actions because they won't receive session ended requests
+    jovo.$googleAnalytics.visitor!.set('sessionControl', 'end');
+    await super.sendError(handleRequest);
   }
 }

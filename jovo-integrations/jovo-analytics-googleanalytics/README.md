@@ -24,8 +24,8 @@ Learn how to use Google Analytics in your Jovo application.
       - [sendItem()](#senditem)
       - [sendUserEvent()](#senduserevent)
       - [setCustomMetric()](#setcustommetric)
-      - [setParameter()](#setparameter)
-      - [setOptimizeExperiment()](#setoptimizeexperiment)
+      - [setParameter](#setparameter)
+      - [setOptimizeExperiment](#setoptimizeexperiment)
       - [Setup endReason metrics in the gooogle analytics console](#setup-endreason-metrics-in-the-gooogle-analytics-console)
 
 ## About Google Analytics
@@ -117,7 +117,9 @@ app.use(
     new GoogleAnalyticsGoogleAssistant()
 );
 ```
-For configurations, all you need is the Tracking ID of your Google Analytics Account. Optionally, you can choose whether you want to track directives, that are not triggered by a user, such as AlexaSkill.AudioPlayer directives. Per default, only user-invocated interactions will be tracked. By setting enableAutomaticEvents you can disable sending events like unhandled and slot values. Additionally you can adjust the googleAnalytics session timeout of the skill to match the timeout specified in the google analytics dashboard (5 minutes is a good value for speech applications). By default users with disabled voice match are ignored in Google Analytics because each of their sessions will be counted as separate user. You can enable tracking them by setting "skipUnverifiedUser" to false.
+
+It is important to enable metadata tracking in your config to allow google analytics to recognize timeouts. Otherwise alexa screen devices will send session ended requests days after this session ended. This would pollute your data by counting additional sessions.
+For the plugin configurations, all you need is the Tracking ID of your Google Analytics Account. Optionally, you can choose whether you want to track directives, that are not triggered by a user, such as AlexaSkill.AudioPlayer directives. Per default, only user-invocated interactions will be tracked. By setting enableAutomaticEvents you can disable sending events like unhandled and slot values. Additionally you can adjust the googleAnalytics session timeout of the skill to match the timeout specified in the google analytics dashboard (5 minutes is a good value for speech applications). By default users with disabled voice match are ignored in Google Analytics because each of their sessions will be counted as separate user. You can enable tracking them by setting "skipUnverifiedUser" to false.
 
 ```javascript
 // @language=javascript
@@ -125,6 +127,10 @@ For configurations, all you need is the Tracking ID of your Google Analytics Acc
 // src/config.js
 
 module.exports = {
+
+    user: {
+      metaData: true,
+    },
     
     analytics: {
         // Configuration for generic tracking plugin
@@ -266,8 +272,8 @@ Events are user interactions with data describing such events. Events can be com
 
 // app.js
 
-LAUNCH() {
-    this.$googleAnalytics.sendEvent({
+async LAUNCH() {
+    await this.$googleAnalytics.sendEvent({
         eventCategory: 'ItemPrice',
         eventAction: 'Teddy Bear',
         eventLabel: this.$user.getId(),
@@ -280,8 +286,8 @@ LAUNCH() {
 
 // app.js
 
-LAUNCH() {
-    this.$googleAnalytics.sendEvent({
+async LAUNCH() {
+    await this.$googleAnalytics.sendEvent({
         eventCategory: 'ItemPrice',
         eventAction: 'Teddy Bear',
         eventLabel: this.$user.getId(),
@@ -293,7 +299,7 @@ LAUNCH() {
 
 #### sendTransaction()
 
-Transactions are self-explanatory. They track transactions made in your app, which can come in handy for [Alexa ISP](https://www.jovo.tech/docs/amazon-alexa/in-skill-purchases), for example. `sendTransaction()` accepts an object with the following properties: 
+Transactions are self-explanatory. They track transactions made in your app, which can come in handy for [Alexa ISP](https://v3.jovo.tech/docs/amazon-alexa/in-skill-purchases), for example. `sendTransaction()` accepts an object with the following properties: 
 
 * transactionId - Unique id for transaction and corresponding transaction items.
 * transactionRevenue - Optional. Total revenue for the current transaction.
@@ -308,8 +314,8 @@ Furthermore, you can attach your own properties to the object.
 
 // app.js
 
-LAUNCH() {
-    this.$googleAnalytics.sendTransaction({
+async LAUNCH() {
+    await this.$googleAnalytics.sendTransaction({
         transactionId: '1234',
         transactionRevenue: 100,
         transactionShipping: 10,
@@ -323,8 +329,8 @@ LAUNCH() {
 
 // app.js
 
-LAUNCH() {
-    this.$googleAnalytics.sendTransaction({
+async LAUNCH() {
+    await this.$googleAnalytics.sendTransaction({
         transactionId: '1234',
         transactionRevenue: 100,
         transactionShipping: 10,
@@ -353,8 +359,8 @@ Furthermore, you can attach your own properties to the object.
 
 // app.js
 
-LAUNCH() {
-    this.$googleAnalytics.sendItem({
+async LAUNCH() {
+    await this.$googleAnalytics.sendItem({
         transactionId: '1234',
         itemName: 'Premium Subscription',
         itemPrice: 30,
@@ -369,8 +375,8 @@ LAUNCH() {
 
 // app.js
 
-LAUNCH() {
-    this.$googleAnalytics.sendItem({
+async LAUNCH() {
+    await this.$googleAnalytics.sendItem({
         transactionId: '1234',
         itemName: 'Premium Subscription',
         itemPrice: 30,
@@ -384,7 +390,8 @@ LAUNCH() {
 
 #### sendUserEvent()
 
-`sendUserEvent()` works almost the same as `sendEvent()` except that the only parameters that you have to provide are `eventCategory` and `eventAction`. The plugin sets the values for `eventLabel` and `documentPath` automatically to your users id and the current session path.
+`sendUserEvent()` works almost the same as `sendEvent()` except that the only parameters that you have to provide are `eventCategory` and `eventAction`. An additional difference is that the enqueued event is not sent immediately but with the next "send" method call. If send is not called manually all events and pageview are sent together before the response middleware.
+The plugin sets the values for `eventLabel` and `documentPath` automatically to your users id and the current session path.
 
 ```javascript
 // @language=javascript
